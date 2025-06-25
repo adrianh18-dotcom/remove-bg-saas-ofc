@@ -1,0 +1,13 @@
+# Ignorar dependências e arquivos de build
+node_modules
+.next
+
+# Ignorar variáveis de ambiente
+.env
+.env.local
+
+# Ignorar arquivos do sistema/macOS
+.DS_Store
+
+# Ignorar arquivos de log
+*.log
