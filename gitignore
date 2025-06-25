@@ -11,3 +11,5 @@ node_modules
 
 # Ignorar arquivos de log
 *.log
+node_modules/
+
