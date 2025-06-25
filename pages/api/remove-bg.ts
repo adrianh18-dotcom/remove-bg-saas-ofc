@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { IncomingForm, type Files, type Fields } from 'formidable';
+import formidable from 'formidable';
 import fs from 'fs';
 import Replicate from 'replicate';
 
@@ -13,14 +13,17 @@ const replicate = new Replicate({
   auth: process.env.REPLICATE_API_TOKEN!,
 });
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== 'POST') {
     return res.status(405).end('Method Not Allowed');
   }
 
-  const form = new IncomingForm({ keepExtensions: true });
+  const form = new formidable.IncomingForm({ keepExtensions: true });
 
-  form.parse(req, async (err: any, fields: Fields, files: Files) => {
+  form.parse(req, async (err: any, fields: any, files: any) => {
     if (err || !files.image) {
       return res.status(400).json({ error: 'Erro ao processar imagem' });
     }
@@ -38,8 +41,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       res.setHeader('Content-Type', 'image/png');
       res.send(imageBuffer);
     } catch (error) {
-      console.error('Erro ao remover fundo:', error);
-      res.status(500).json({ error: 'Erro ao remover fundo' });
+      console.error('Falha na remoção de fundo:', error);
+      res.status(500).json({ error: 'Falha na remoção de fundo' });
     }
   });
 }
